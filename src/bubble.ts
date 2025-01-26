@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 
+
 export default class Bubble extends THREE.Mesh{
     
 
@@ -12,13 +13,14 @@ export default class Bubble extends THREE.Mesh{
             metalness: 0,
             roughness: 0,
             transmission: 1,
-            opacity: 0.25,
+            opacity: 1,
             transparent: true,
             side: THREE.DoubleSide,
             clearcoat: 1,
             clearcoatRoughness: 0,
             reflectivity: 1,
             //envMap: texture, // Use the loaded environment map
+            envMapIntensity: 1
           });
 
         const geometry = new THREE.SphereGeometry();
@@ -73,6 +75,9 @@ export default class Bubble extends THREE.Mesh{
         this.rotation.y += 0.005;
     }
 
+    setEVMap(evMapTexture){
+      this.material.envMap = evMapTexture;
+    }
 
     // static generateTexture() {
 

@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import Bubble from './bubble';
-import bg_image from './images/bg_mountains.png';
-//import bg_image from './images/equirectangular.png';
-
+import bg_image from './images/bg_game.png';
+import bg_equirect from './images/equirectangular.png';
+import bg_equirect_bubble from './images/bg_equirect_bubble.png';
 
 
 // Scene
@@ -51,16 +51,47 @@ const textureLoader = new THREE.TextureLoader();
 const bgTexture = textureLoader.load(bg_image, () => {
   console.log('Background image loaded');
 });
+
 scene.background = bgTexture;
+scene.backgroundIntensity = 0.1;
+
+const planeGeom = new THREE.BoxGeometry(10,10,1);
+const planeMat = new THREE.MeshBasicMaterial();
+
+
+const theBubble = new Bubble(bgTexture);
+theBubble.position.y = -1.5;
+scene.add(theBubble);
+
+
+// const loader = new THREE.TextureLoader();
+// loader.load(bg_equirect_bubble, function (texture) {
+//   texture.mapping = THREE.EquirectangularReflectionMapping;
+//   scene.background = texture; // Optional: Set as scene background
+//   scene.environment = texture; // Use as environment map for materials
+// });
+
+const loaderTexBubble = new THREE.TextureLoader();
+loaderTexBubble.load(bg_equirect_bubble, function (texture) {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  theBubble.setEVMap(texture);
+});
+
+
+
 
 // Ambient light for general illumination
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambientLight);
+// const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+// scene.add(ambientLight);
 
 // Point light to create highlights and reflections
-const pointLight = new THREE.PointLight(0xffffff, 1);
+const pointLight = new THREE.PointLight(0xffffff, 100);
 pointLight.position.set(5, 5, 5);
 scene.add(pointLight);
+
+const rectLight = new THREE.RectAreaLight(0xffffff, 200, 10,2);
+rectLight.position.set(-10, 10, 10);
+scene.add(rectLight);
 
 // var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
 // 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
@@ -72,9 +103,6 @@ scene.add(pointLight);
 // 	floor.rotation.x = Math.PI / 2;
 // 	scene.add(floor);
 
-const theBubble = new Bubble(bgTexture);
-
-scene.add(theBubble);
 
 // Animation Loop
 function animate() {
