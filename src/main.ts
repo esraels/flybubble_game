@@ -1,6 +1,10 @@
 import * as THREE from 'three';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import Bubble from './bubble';
 import bg_image from './images/bg_mountains.png';
+//import bg_image from './images/equirectangular.png';
+
+
 
 // Scene
 const scene = new THREE.Scene();
@@ -13,11 +17,16 @@ const camera = new THREE.PerspectiveCamera(
   0.1, // Near clipping plane
   1000 // Far clipping plane
 );
+//camera.position.y = 2;
 camera.position.z = 5;
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true});
+//renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize(window.innerWidth, window.innerHeight);
+//renderer.shadowMap.enabled = true;
+//renderer.toneMapping = THREE.ACESFilmicToneMapping;
+//renderer.toneMappingExposure = 1;
 
 // Append renderer to the DOM
 const container = document.getElementById('canvas-container');
